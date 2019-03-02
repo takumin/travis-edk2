@@ -1,0 +1,19 @@
+dist: xenial
+language: c
+addons:
+  apt:
+    packages:
+    - qemu
+    - uuid-dev
+    - nasm
+    - libisal-dev
+    - python3-distutils
+jobs:
+  include:
+    - stage: "Build"
+      name: "IA32"
+      script: ./edk2/OvmfPkg/build.sh -b RELEASE -n $(nproc) -a IA32 -D HTTP_BOOT_ENABLE qemu
+    - name: "IA32X64"
+      script: ./edk2/OvmfPkg/build.sh -b RELEASE -n $(nproc) -a IA32 -a X64 -D HTTP_BOOT_ENABLE qemu
+    - name: "X64"
+      script: ./edk2/OvmfPkg/build.sh -b RELEASE -n $(nproc) -a X64 -D HTTP_BOOT_ENABLE qemu
