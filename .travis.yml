@@ -7,7 +7,7 @@ addons:
     - uuid-dev
     - nasm
     - iasl
-    - python3-distutils
+    - python3-setuptools
 jobs:
   include:
     - stage: "Build"
