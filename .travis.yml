@@ -7,11 +7,22 @@ addons:
     - uuid-dev
     - nasm
     - iasl
+    - python3
+    - python3-dev
     - python3-setuptools
+git:
+  submodule: false
+env:
+  global:
+    - MAKEFLAGS="-j $(nproc)"
 stages:
+  - initialize
   - compile
 jobs:
   include:
+    - stage: initialize
+      name: "Submodules"
+      script: git submodule update --init --recursive --depth 50
     - stage: compile
       name: "IA32"
       script: cd ./edk2 && ./OvmfPkg/build.sh -n $(nproc) -D HTTP_BOOT_ENABLE -D TLS_ENABLE -b RELEASE -a IA32
