@@ -8,12 +8,14 @@ addons:
     - nasm
     - iasl
     - python3-setuptools
+stages:
+  - compile
 jobs:
   include:
-    - stage: "Build"
+    - stage: compile
       name: "IA32"
-      script: ./edk2/OvmfPkg/build.sh -n $(nproc) -D HTTP_BOOT_ENABLE -D TLS_ENABLE -b RELEASE -a IA32
+      script: cd ./edk2 && ./OvmfPkg/build.sh -n $(nproc) -D HTTP_BOOT_ENABLE -D TLS_ENABLE -b RELEASE -a IA32
     - name: "IA32X64"
-      script: ./edk2/OvmfPkg/build.sh -n $(nproc) -D HTTP_BOOT_ENABLE -D TLS_ENABLE -b RELEASE -a IA32 -a X64
+      script: cd ./edk2 && ./OvmfPkg/build.sh -n $(nproc) -D HTTP_BOOT_ENABLE -D TLS_ENABLE -b RELEASE -a IA32 -a X64
     - name: "X64"
-      script: ./edk2/OvmfPkg/build.sh -n $(nproc) -D HTTP_BOOT_ENABLE -D TLS_ENABLE -b RELEASE -a X64
+      script: cd ./edk2 && ./OvmfPkg/build.sh -n $(nproc) -D HTTP_BOOT_ENABLE -D TLS_ENABLE -b RELEASE -a X64
