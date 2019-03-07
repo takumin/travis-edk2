@@ -5,25 +5,21 @@ addons:
   update: true
   apt:
     packages:
-    - build-essential
     - uuid-dev
     - nasm
     - iasl
-    - qemu
 git:
   depth: 1
   submodules: false
 env:
   global:
     - MAKEFLAGS="-j $(nproc)"
+install:
+  - git submodule update --init --recursive --depth 1
 stages:
-  - initialize
   - compile
 jobs:
   include:
-    - stage: initialize
-      name: "Submodules"
-      script: git submodule update --init --recursive --depth 1
     - stage: compile
       name: "IA32"
       script: cd ./edk2 && ./OvmfPkg/build.sh -n $(nproc) -D HTTP_BOOT_ENABLE -D TLS_ENABLE -b RELEASE -a IA32
