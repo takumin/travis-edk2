@@ -6,13 +6,13 @@ addons:
   apt:
     packages:
     - build-essential
-    - qemu
     - uuid-dev
     - nasm
     - iasl
+    - qemu
 git:
   depth: 1
-  submodule: false
+  submodules: false
 env:
   global:
     - MAKEFLAGS="-j $(nproc)"
