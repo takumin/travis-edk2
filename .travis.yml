@@ -15,9 +15,9 @@ env:
   global:
     - MAKEFLAGS="-j $(nproc)"
   matrix:
-    - Processor="Ia32X64" OPTS="-a IA32 -a X64"
-    - Processor="Ia32"    OPTS="-a IA32"
-    - Processor="X64"     OPTS="-a X64"
+    - Processor="3264" OPTS="-a IA32 -a X64"
+    - Processor="Ia32" OPTS="-a IA32"
+    - Processor="X64"  OPTS="-a X64"
 install:
   - git submodule update --init --recursive --depth 10
 before_script:
@@ -29,5 +29,5 @@ after_success:
   - cp edk2/Build/Ovmf${Processor}/RELEASE_GCC5/FV/OVMF.fd      OVNF_${Processor}.fd
   - cp edk2/Build/Ovmf${Processor}/RELEASE_GCC5/FV/OVMF_CODE.fd OVNF_CODE_${Processor}.fd
   - cp edk2/Build/Ovmf${Processor}/RELEASE_GCC5/FV/OVMF_VARS.fd OVNF_VARS_${Processor}.fd
-  - sha256sum OVMF*fd > OVMF_${Processor}.sha256
+  - sha256sum OVNF_${Processor}.fd OVNF_CODE_${Processor}.fd OVNF_VARS_${Processor}.fd > OVMF_${Processor}.sha256
   - cat OVMF_${Processor}.sha256
