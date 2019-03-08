@@ -9,21 +9,25 @@ addons:
     - nasm
     - iasl
 git:
-  depth: 1
+  depth: 10
   submodules: false
 env:
   global:
     - MAKEFLAGS="-j $(nproc)"
+  matrix:
+    - Processor="Ia32X64" OPTS="-a IA32 -a X64"
+    - Processor="Ia32"    OPTS="-a IA32"
+    - Processor="X64"     OPTS="-a X64"
 install:
-  - git submodule update --init --recursive --depth 1
-stages:
-  - compile
-jobs:
-  include:
-    - stage: compile
-      name: "IA32"
-      script: cd ./edk2 && ./OvmfPkg/build.sh -n $(nproc) -D HTTP_BOOT_ENABLE -D TLS_ENABLE -b RELEASE -a IA32
-    - name: "IA32X64"
-      script: cd ./edk2 && ./OvmfPkg/build.sh -n $(nproc) -D HTTP_BOOT_ENABLE -D TLS_ENABLE -b RELEASE -a IA32 -a X64
-    - name: "X64"
-      script: cd ./edk2 && ./OvmfPkg/build.sh -n $(nproc) -D HTTP_BOOT_ENABLE -D TLS_ENABLE -b RELEASE -a X64
+  - git submodule update --init --recursive --depth 10
+before_script:
+  - pushd edk2
+script:
+  - OvmfPkg/build.sh -n $(nproc) -D HTTP_BOOT_ENABLE -D TLS_ENABLE -b RELEASE ${OPTS}
+after_success:
+  - popd
+  - cp edk2/Build/Ovmf${Processor}/RELEASE_GCC5/FV/OVMF.fd      OVNF_${Processor}.fd
+  - cp edk2/Build/Ovmf${Processor}/RELEASE_GCC5/FV/OVMF_CODE.fd OVNF_CODE_${Processor}.fd
+  - cp edk2/Build/Ovmf${Processor}/RELEASE_GCC5/FV/OVMF_VARS.fd OVNF_VARS_${Processor}.fd
+  - sha256sum OVMF*fd > OVMF_${Processor}.sha256
+  - cat OVMF_${Processor}.sha256
