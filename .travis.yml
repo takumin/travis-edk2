@@ -31,3 +31,15 @@ after_success:
   - cp edk2/Build/Ovmf${Processor}/RELEASE_GCC5/FV/OVMF_VARS.fd OVNF_VARS_${Processor}.fd
   - sha256sum OVNF_${Processor}.fd OVNF_CODE_${Processor}.fd OVNF_VARS_${Processor}.fd > OVMF_${Processor}.sha256
   - cat OVMF_${Processor}.sha256
+deploy:
+  provider: releases
+  api_key:
+    secure: "aCqzKzt/iolWHwhYNuq+ChoWS1nYzTOiVll7tvE7HwDZ6ZiZcWCEN4msXFpyOVYslOUX+3tPBX7LdAOIsR2kuFa9gU7fLTaCrwAhbjNL/mUKON6/mV+ZTYQax6LSTXHOMyMN7pKX2V2VEXYQdZSFq8uVubi2TA00L60Mn/vPvy3eKsILK9TJFHOmDGuoN1kbHIN1Hmj8Rhg2clqavw2akYmqHweBYg99H810+m/FS/75dMR6tBWUeTbqRpMPJbP2puTCWBvNQrxYW0Y1hcmnpxjDKdGrT8JfrP9kOy/veNnvIKvLvatTMtFbiBjVudjttRIE/VR00QXEdcO4vRz/1zE1vo17X4hSJQsFtEuU4YDXMF0AspVHlRF9kBAIG+KBVxAasYqe3yjQkbR31LSt3VvTdzHGsCp+EibYYgy8dEvGhRQKIpr2On/F+PN4agW47sy8uErCuQjtapvcijpvkyht61btb5CQ+8UFrffYbufnLwKNa6kYcOENHfVTAISCRaLc/+lW9qDNMksVcMUC6AEc2j4RGoFxopAr5DAoM6HWDDXWBzWqZ53XEJCf+9MxoC4OU7odmkBf7i1L3xhL6GHHMhFdjOcJNhT/1VN0FXA7FZ8ZJZM5vHucSL22rqw0r+5I2hBu5Oi0omM8sv73wXTJ0h+ePxiONiueYY3heJI="
+  file_glob: true
+  file:
+    - "OVNF_*.fd"
+    - "OVNF_*.sha256"
+  skip_cleanup: true
+  on:
+    tags: true
+    all_branches: true
