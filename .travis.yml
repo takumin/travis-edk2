@@ -23,13 +23,13 @@ install:
 before_script:
   - pushd edk2
 script:
-  - OvmfPkg/build.sh -n $(nproc) -D HTTP_BOOT_ENABLE -D TLS_ENABLE -b RELEASE ${OPTS}
+  - OvmfPkg/build.sh -n $(nproc) -D HTTP_BOOT_ENABLE -D SECURE_BOOT_ENABLE -D FD_SIZE_2MB -b RELEASE ${OPTS}
 after_success:
   - popd
   - cp edk2/Build/Ovmf${Processor}/RELEASE_GCC5/FV/OVMF.fd      OVNF_${Processor}.fd
-  - cp edk2/Build/Ovmf${Processor}/RELEASE_GCC5/FV/OVMF_CODE.fd OVNF_CODE_${Processor}.fd
-  - cp edk2/Build/Ovmf${Processor}/RELEASE_GCC5/FV/OVMF_VARS.fd OVNF_VARS_${Processor}.fd
-  - sha256sum OVNF_${Processor}.fd OVNF_CODE_${Processor}.fd OVNF_VARS_${Processor}.fd > OVMF_${Processor}.sha256
+  - cp edk2/Build/Ovmf${Processor}/RELEASE_GCC5/FV/OVMF_CODE.fd OVNF_${Processor}_CODE.fd
+  - cp edk2/Build/Ovmf${Processor}/RELEASE_GCC5/FV/OVMF_VARS.fd OVNF_${Processor}_VARS.fd
+  - sha256sum OVNF_${Processor}.fd OVNF_${Processor}_CODE.fd OVNF_${Processor}_VARS.fd > OVMF_${Processor}.sha256
   - cat OVMF_${Processor}.sha256
 deploy:
   provider: releases
